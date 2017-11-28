@@ -1,0 +1,74 @@
+#include<stdlib.h>
+#include<stdio.h>
+template<class T>
+class MyArray {
+private:
+	int m_nTotalSize;
+	int m_nValidSize;
+	T* m_nData;
+public:
+	 MyArray(int n = 3)
+	{
+		m_nTotalSize = n;
+		m_nValidSize = 0;
+		m_nData = new T[n];
+	}
+	void A(T value)
+	{
+		if (m_nValidSize < m_nTotalSize)
+		{
+			m_nData[m_nValidSize] = value;
+			m_nValidSize++;
+		}
+		else {
+			T* tmpData = new T[m_nTotalSize];
+			int i;
+			for (i = 0; i < m_nTotalSize; i++)
+			{
+				tmpData[i] = m_nData[i];
+			}
+			int m = m_nTotalSize;
+			m_nTotalSize = m_nTotalSize * 2;
+			delete []m_nData;
+			 m_nData=new T[m_nTotalSize];
+			for (i = 0; i < m_nValidSize; i++)
+			{
+				m_nData[i] = tmpData[i];
+			}
+			delete[]tmpData;
+			m_nData[m_nValidSize] = value;
+			m_nValidSize++;
+		}
+	}
+	int getlength()
+	{
+		return m_nValidSize;
+	}
+
+	T get(int pos)
+	{
+		return m_nData[pos];
+	}
+
+	virtual~MyArray(){
+		if (m_nData != NULL)
+		{
+			delete[]m_nData;
+		}
+	}
+};
+
+int main()
+{
+	MyArray<int>obj;
+	obj.A(1);
+	obj.A(3);
+	obj.A(2);
+	obj.A(4);
+	for (int i = 0; i < obj.getlength(); i++)
+	{
+		printf("%d\n", obj.get(i));
+	}
+	system("pause");
+	return 0;
+}
